@@ -75,12 +75,14 @@ Use
 (define-scope name initial-requires ...)
 ```
 
-to define a scope called `name`, which will initially have the bindings available from the `initial-requires ...`. The initial requires can be any require specification, but they are expanded in an empty scope, so require forms like `submod` and `only-in` aren't available unless they are provided by an earlier initial require in the sequence. The module `multiscope2/basic-require-forms` exports the basic require forms from `racket/base`, so you can write things like:
+to define a scope called `name`, which will initially have the bindings available from the `initial-requires ...`. The initial requires can be any require specification, but they are expanded in an empty scope, so require forms like `submod`, `only-in`, and even `quote` aren't available unless they are provided by an earlier initial require in the sequence. The module `multiscope2/basic-require-forms` exports the basic require forms from `racket/base`, so you can write things like:
 
 ```
+(module a racket)
+
 (define-scope foo
-  multiscope2/basic-require-forms
-  (submod ".." a))
+  multiscope2/base-require-forms
+  'a)
 ```
 
 Within the body of the module, the scope names are bound (at phase 0) to macros that cause their argument to be evaluated within that named scope. The scope-applying macros are visible in every named scope. When scope-applications are nested, the innermost scope applies. Other than their scoping effects, the scope-application macros have the same behavior as `begin`.
